@@ -2,24 +2,49 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
     />
     <meta
       http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
     />
+    <title>yterm</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>, Chromium
-    <span id="chrome-version"></span>, and Electron
-    <span id="electron-version"></span>.
-
-    <!-- You can also require other files to run in this process -->
+    <div class="grid">
+      <form action="">
+        <label for="ports">Port</label>
+        <select name="ports" id="ports">
+          <option hidden disabled selected value></option>
+        </select>
+      </form>
+      <form action="">
+        <label for="baudrate">Baudrate (bps)</label>
+        <input id="baudrate" type="text" placeholder="9600" />
+      </form>
+      <form action="">
+        <label for="timeout">Timeout (s)</label>
+        <input id="timeout" type="text" placeholder="1" />
+      </form>
+      <button type="submit" id="refresh">
+        <img src="./assets/rotate.svg" alt="Refresh" />
+      </button>
+      <button type="submit" id="connect">
+        <img src="./assets/bolt.svg" alt="Connect" />
+      </button>
+    </div>
+    <textarea readonly>
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tenetur, molestiae assumenda iure eaque repellendus deleniti quam sit provident similique.</textarea
+    >
+    <div>
+      <input id="data" type="text" />
+      <button type="submit">
+        <img id="send" src="./assets/upload.svg" alt="Send" />
+      </button>
+    </div>
     <script src="./dist/renderer.js"></script>
   </body>
 </html>
