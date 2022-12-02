@@ -25,3 +25,10 @@ Start application:
 ```zsh
 npm start
 ```
+
+## Resources
+
+- [Inter-Process Communication](https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-3-main-to-renderer)
+- [Context Isolation](https://www.electronjs.org/docs/latest/tutorial/context-isolation#usage-with-typescript)
+- [contextBridge](https://www.electronjs.org/docs/latest/api/context-bridge)
+- [SerialPort docs](https://serialport.io/docs/)
