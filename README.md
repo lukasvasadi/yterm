@@ -1,8 +1,12 @@
 # yterm
 
-Serial terminal for hardware debugging.
+A basic serial terminal for hardware debugging. Application automatically finds available comports and pushes notifications for the connection status.
+
+![](./assets/yterm-window.png)
 
 ## Installation
+
+Requires the Node package manager (`npm`). To add `npm` to your development environment, follow the instructions at [lukasvasaid.github.io](https://lukasvasadi.github.io/posts/environment.html).
 
 Clone this repository:
 

@@ -2,9 +2,10 @@ import { ipcRenderer, contextBridge } from "electron"
 
 contextBridge.exposeInMainWorld("api", {
   getPorts: () => ipcRenderer.invoke("get-ports"),
-  setPort: (port: any) => ipcRenderer.invoke("set-port", port),
-  getData: () => ipcRenderer.on("data", (data) => console.log(data)),
-  sendData: (data: string) => ipcRenderer.invoke("send-data", data),
+  setPort: (port: object) => ipcRenderer.invoke("set-port", port),
+  writeData: (data: string) => ipcRenderer.invoke("send-data", data),
+  getData: (callback: any) => ipcRenderer.on("data", callback),
+  closePort: () => ipcRenderer.send("close-port"),
 })
 
 window.addEventListener("DOMContentLoaded", () => {

@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="grid">
+    <div>
       <form action="">
         <label for="ports">Port</label>
         <select name="ports" id="ports">
@@ -23,26 +23,24 @@
       </form>
       <form action="">
         <label for="baudrate">Baudrate (bps)</label>
-        <input id="baudrate" type="text" placeholder="9600" />
+        <input id="baudrate" type="text" placeholder="9600" value="9600" />
       </form>
       <form action="">
         <label for="timeout">Timeout (s)</label>
-        <input id="timeout" type="text" placeholder="1" />
+        <input id="timeout" type="text" placeholder="1" value="1" />
       </form>
-      <button type="submit" id="refresh">
-        <img src="./assets/rotate.svg" alt="Refresh" />
-      </button>
       <button type="submit" id="connect">
         <img src="./assets/bolt.svg" alt="Connect" />
       </button>
+      <button type="submit" id="refresh">
+        <img src="./assets/rotate.svg" alt="Refresh" />
+      </button>
     </div>
-    <textarea readonly>
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam tenetur, molestiae assumenda iure eaque repellendus deleniti quam sit provident similique.</textarea
-    >
+    <textarea id="output" readonly></textarea>
     <div>
-      <input id="data" type="text" />
-      <button type="submit">
-        <img id="send" src="./assets/upload.svg" alt="Send" />
+      <input id="message" type="text" />
+      <button id="send" type="submit">
+        <img src="./assets/upload.svg" alt="Send" />
       </button>
     </div>
     <script src="./dist/renderer.js"></script>

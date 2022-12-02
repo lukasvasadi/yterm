@@ -1,33 +1,81 @@
-console.log("Hello from renderer process")
-
-// @ts-expect-error
-api.getPorts().then((ports: any) => {
-  var select: any = document.getElementById("ports")
-  console.log(ports)
-  for (var key in ports) {
-    console.log(ports[key])
-    if (ports[key].manufacturer) {
-      var option = document.createElement("option")
-      option.text = ports[key].path + " | " + ports[key].manufacturer
-      select.add(option)
+function getPorts() {
+  api.getPorts().then((ports: any) => {
+    const select: HTMLSelectElement = document.getElementById(
+      "ports"
+    ) as HTMLSelectElement
+    for (var key in ports) {
+      if (ports[key].manufacturer) {
+        var option: HTMLOptionElement = document.createElement("option")
+        option.text = ports[key].path + " | " + ports[key].manufacturer
+        select.add(option)
+      }
     }
-  }
+  })
+}
+
+function updateTextarea(data: string) {
+  const textarea = document.getElementById("output") as HTMLTextAreaElement
+  textarea.value += data
+}
+
+api.getData((_event: object, data: string) => {
+  updateTextarea(data)
 })
 
 document.getElementById("connect").onclick = () => {
-  // @ts-expect-error
-  var path = document.getElementById("ports").value
+  var path: string = (document.getElementById("ports") as HTMLSelectElement)
+    .value
   path = path.substring(0, path.indexOf(" "))
-  // @ts-expect-error
-  var baudrate = document.getElementById("baudrate").value
-  console.log({ path: path, baudrate: parseInt(baudrate) })
-  // @ts-expect-error
-  api.setPort({ path: path, baudrate: parseInt(baudrate) })
+  var baudrate: number = parseInt(
+    (document.getElementById("baudrate") as HTMLInputElement).value
+  )
+  api.setPort({ path: path, baudrate: baudrate }).then((connected: boolean) => {
+    if (connected) {
+      const portStatus = new Notification("Device connected!")
+      setTimeout(() => portStatus.close(), 3000)
+    } else {
+      const portStatus = new Notification("Unable to connect device...", {
+        body: "Check that comport is not open in another application.",
+      })
+      setTimeout(() => portStatus.close(), 3000)
+    }
+  })
 }
 
 document.getElementById("send").onclick = () => {
-  // @ts-expect-error
-  var message = document.getElementById("data").value
-  // @ts-expect-error
-  api.sendData(message)
+  const input: HTMLInputElement = document.getElementById(
+    "message"
+  ) as HTMLInputElement
+  var data: string = input.value
+  if (data) {
+    api.writeData(data)
+    updateTextarea(data + "\r")
+    input.value = ""
+  }
 }
+
+document
+  .getElementById("message")
+  .addEventListener("keypress", (event: KeyboardEvent) => {
+    if (event.key == "Enter") {
+      event.preventDefault()
+      document.getElementById("send").click()
+    }
+  })
+
+document.getElementById("refresh").onclick = () => {
+  const textarea: HTMLTextAreaElement = document.getElementById(
+    "output"
+  ) as HTMLTextAreaElement
+  textarea.value = ""
+  api.closePort()
+  const portStatus = new Notification("Port closed")
+  setTimeout(() => portStatus.close(), 3000)
+  const select: HTMLSelectElement = document.getElementById(
+    "ports"
+  ) as HTMLSelectElement
+  for (let i = select.options.length - 1; i > 0; i--) select.remove(i)
+  getPorts()
+}
+
+getPorts()
