@@ -1,3 +1,5 @@
+var portStatus: boolean = false
+
 function getPorts() {
   api.getPorts().then((ports: any) => {
     const select: HTMLSelectElement = document.getElementById(
@@ -18,8 +20,16 @@ function updateTextarea(data: string) {
   textarea.value += data
 }
 
+function automaticScroll() {
+  // Enable default textarea scroll
+  const textarea: HTMLTextAreaElement = document.getElementById(
+    "output"
+  ) as HTMLTextAreaElement
+  setInterval(() => (textarea.scrollTop = textarea.scrollHeight), 1000)
+}
+
 api.getData((_event: object, data: string) => {
-  updateTextarea(data)
+  updateTextarea(">> " + data)
 })
 
 document.getElementById("connect").onclick = () => {
@@ -30,9 +40,10 @@ document.getElementById("connect").onclick = () => {
     (document.getElementById("baudrate") as HTMLInputElement).value
   )
   api.setPort({ path: path, baudrate: baudrate }).then((connected: boolean) => {
+    portStatus = connected
     if (connected) {
-      const portStatus = new Notification("Device connected!")
-      setTimeout(() => portStatus.close(), 3000)
+      const portStatusNotification = new Notification("Device connected!")
+      setTimeout(() => portStatusNotification.close(), 3000)
     } else {
       const portStatus = new Notification("Unable to connect device...", {
         body: "Check that comport is not open in another application.",
@@ -43,14 +54,16 @@ document.getElementById("connect").onclick = () => {
 }
 
 document.getElementById("send").onclick = () => {
-  const input: HTMLInputElement = document.getElementById(
-    "message"
-  ) as HTMLInputElement
-  var data: string = input.value
-  if (data) {
-    api.writeData(data)
-    updateTextarea(data + "\r")
-    input.value = ""
+  if (portStatus) {
+    const input: HTMLInputElement = document.getElementById(
+      "message"
+    ) as HTMLInputElement
+    var data: string = input.value
+    if (data) {
+      api.writeData(data)
+      updateTextarea("<< " + data + "\r")
+      input.value = ""
+    }
   }
 }
 
@@ -69,8 +82,8 @@ document.getElementById("refresh").onclick = () => {
   ) as HTMLTextAreaElement
   textarea.value = ""
   api.closePort()
-  const portStatus = new Notification("Port closed")
-  setTimeout(() => portStatus.close(), 3000)
+  const portStatusNotification = new Notification("Port closed")
+  setTimeout(() => portStatusNotification.close(), 3000)
   const select: HTMLSelectElement = document.getElementById(
     "ports"
   ) as HTMLSelectElement
@@ -78,4 +91,5 @@ document.getElementById("refresh").onclick = () => {
   getPorts()
 }
 
-getPorts()
+getPorts() // Search for ports on startup
+automaticScroll()
