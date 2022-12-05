@@ -8,6 +8,7 @@
   --text-alt: #222;
   --dropdown: #ffbd03;
   --input-width: 100%;
+  --select-width: 100%;
   --border-radius: 5px;
 }
 
@@ -56,7 +57,7 @@ select {
   background-color: var(--dropdown);
   border-radius: var(--border-radius);
   font-size: 16px;
-  width: var(--input-width);
+  width: var(--select-width);
   height: 36px;
   border: none;
   padding: 5px;

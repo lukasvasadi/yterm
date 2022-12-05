@@ -2,7 +2,7 @@
 
 A basic serial terminal for hardware debugging. Application automatically finds available comports and pushes notifications for the connection status.
 
-![](./assets/yterm-window.png)
+![](./assets/yterm-win.png)
 
 ## Installation
 
